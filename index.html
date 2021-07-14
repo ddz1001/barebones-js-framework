@@ -1,0 +1,71 @@
+<html>
+    <head>
+        <script src="eventhandler.js"></script>
+        <script src="requesthandler.js"></script>
+
+        <script>
+
+            let eventhandler = new EventHandler();
+            let requesthandler = new RequestHandler();
+
+            
+
+            function bind() {
+                
+                let obj = {
+                    handleEvent: setOut
+                };
+
+                eventhandler.register(obj);
+
+                setInterval(processor, 1000);
+
+            }
+
+            function processor() {
+                eventhandler.distribute();
+            }
+
+            function setOut(event) {
+                var elem = document.getElementById("outlet");
+                elem.innerHTML = "<p>" + event.name + " " + event.data + "</p>";
+            } 
+
+            function addEvent(str) {
+                eventhandler.enqueue(new Event(str, null));
+            }
+
+
+            function getBird() {
+                let url = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Northern_Cardinal_Broadside.jpg/1280px-Northern_Cardinal_Broadside.jpg";
+                requesthandler.restRequestBlob("GET", url)
+                .then( function(data) {
+                    let imageUrl = window.URL.createObjectURL(data);
+                    document.querySelector("#bird").src = imageUrl;
+                })
+                .catch( function(err) {
+                    console.log(err);
+                });
+
+            }
+
+            
+
+        </script>
+    </head>
+    <body onload="bind()">
+
+        <h2>Hello world</h2>
+        <button onclick="addEvent('Hello')">ClickMe!</button>        
+        <div id="outlet"></div>
+        
+        <button onclick="getBird()">Clic for Bird</button>
+        <div>
+            <img id="bird"/>
+
+        </div>
+
+
+
+    </body>
+</html>
